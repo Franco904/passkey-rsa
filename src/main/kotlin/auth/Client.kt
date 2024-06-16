@@ -18,7 +18,7 @@ object Client {
         return Pair(displayName, email)
     }
 
-    fun generatePasskeyAndCertificate(): Certificate {
+    fun createPasskeyAndCertificate(): Certificate {
         // Passkey = private key
         val storedPrivateKey = KeyStoreManager.getKey(alias = "private")
 

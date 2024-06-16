@@ -35,7 +35,7 @@ private fun runSignUpMode() {
     println("[ Registro ]\n")
 
     val (displayName, email) = Client.inputDisplayNameAndEmail()
-    val certificate = Client.generatePasskeyAndCertificate()
+    val certificate = Client.createPasskeyAndCertificate()
 
     val authDataDto = ClientAuthDataDto(
         displayName = displayName,

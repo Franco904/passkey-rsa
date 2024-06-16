@@ -11,6 +11,8 @@ fun main() {
     // Add BouncyCastle security provider so we can access its algorithms
     Security.addProvider(BouncyCastleFipsProvider())
 
+    Server.init()
+
     while (true) {
         when (getAppMode()) {
             "1" -> runSignUpMode()
@@ -18,6 +20,8 @@ fun main() {
             "0" -> break
         }
     }
+
+    Server.finish()
 }
 
 private fun getAppMode(): String {

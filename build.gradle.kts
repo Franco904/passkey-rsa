@@ -15,4 +15,9 @@ dependencies {
 
     // Encoding
     implementation("commons-codec:commons-codec:1.16.1")
+
+    // Storage
+    implementation("org.xerial:sqlite-jdbc:3.45.3.0")
+    implementation("org.slf4j:slf4j-api:2.0.13")
+    implementation("org.slf4j:slf4j-log4j12:2.0.13")
 }

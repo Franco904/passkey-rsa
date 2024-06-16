@@ -11,6 +11,7 @@ repositories {
 dependencies {
     // Security
     implementation("org.bouncycastle:bc-fips:1.0.2.5")
+    implementation("org.bouncycastle:bcpkix-fips:1.0.7")
 
     // Encoding
     implementation("commons-codec:commons-codec:1.16.1")

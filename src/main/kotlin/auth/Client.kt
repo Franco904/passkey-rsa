@@ -11,13 +11,13 @@ object Client {
     private val keyStoreManager = KeyStoreManager()
 
     fun inputDisplayNameAndEmail(): Pair<String, String> {
-//        println("Nome:")
-//        val displayName = scanner.nextLine().trim()
-        val displayName = faker.name.name()
+        println("Nome:")
+        val displayName = scanner.nextLine().trim()
+//        val displayName = faker.name.name()
 
-//        println("E-mail:")
-//        val email = scanner.nextLine().trim()
-        val email = "${displayName.lowercase().split(' ').last()}@email.com"
+        println("E-mail:")
+        val email = scanner.nextLine().trim()
+//        val email = "${displayName.lowercase().split(' ').last()}@email.com"
 
         return Pair(displayName, email)
     }

@@ -55,8 +55,7 @@ object Server {
     }
 
     fun checkClientCredentials(email: String): Pair<String, String> {
-        // TODO: Tornar genérica a mensagem de erro
-        val storedUser = usersDao.findByEmail(email) ?: throw Exception("[Erro] Server: Usuário não cadastrado.")
+        val storedUser = usersDao.findByEmail(email) ?: throw Exception("[Erro] Server: Usuário não encontrado.")
 
         return Pair(storedUser.id, storedUser.challengeBuffer)
     }
@@ -69,13 +68,15 @@ object Server {
 
         val challengeBuffer = signedChallengeBuffer.decrypt(certificate)
 
-        val storedUser = usersDao.findById(userId) ?: throw Exception("[Erro] Server: Usuário não cadastrado.")
+        val storedUser = usersDao.findById(userId) ?: throw Exception("[Erro] Server: Usuário não encontrado.")
         val storedChallengeBuffer = storedUser.challengeBuffer
 
         val isAuthenticated = challengeBuffer == storedChallengeBuffer
 
         if (isAuthenticated) {
             println("[Sucesso] Server: Usuário autenticado com sucesso.")
+        } else {
+            println("[Erro] Server: Challenge inválido.")
         }
     }
 }

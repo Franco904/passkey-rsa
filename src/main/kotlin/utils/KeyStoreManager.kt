@@ -4,12 +4,7 @@ import java.security.Key
 import java.security.KeyStore
 import java.security.cert.Certificate
 
-object KeyStoreManager {
-    private const val TYPE = "BCFKS"
-    private const val PROVIDER = "BCFIPS"
-
-    private const val KEYSTORE_MASTER_PASSWORD = "password"
-
+class KeyStoreManager {
     private val keyStore = KeyStore.getInstance(TYPE, PROVIDER).apply {
         load(null, null)
     }
@@ -46,5 +41,12 @@ object KeyStoreManager {
 
     fun getCertificate(alias: String): Certificate? {
         return keyStore.getCertificate(alias)
+    }
+
+    companion object {
+        private const val TYPE = "BCFKS"
+        private const val PROVIDER = "BCFIPS"
+
+        private const val KEYSTORE_MASTER_PASSWORD = "password"
     }
 }

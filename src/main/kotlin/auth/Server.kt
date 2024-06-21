@@ -12,6 +12,8 @@ object Server {
     private val databaseManager = DatabaseManager()
     private val usersDao = UsersDao(databaseManager)
 
+    private val keyStoreManager = KeyStoreManager()
+
     fun init() {
         databaseManager.connect()
     }
@@ -20,14 +22,10 @@ object Server {
         databaseManager.disconnect()
     }
 
-    fun storeCertificate(certificate: Certificate) {
-        KeyStoreManager.storeCertificate(
-            alias = "public",
-            certificate = certificate,
-        )
-    }
-
-    fun signUp(displayName: String, email: String) {
+    fun signUp(
+        displayName: String,
+        email: String,
+    ): String {
         val storedUser = usersDao.findByEmail(email)
         if (storedUser != null) throw Exception("[Erro] Server: Usuário já cadastrado.")
 
@@ -42,6 +40,18 @@ object Server {
         )
 
         usersDao.createUser(user)
+
+        return userId
+    }
+
+    fun storeCertificate(
+        certificate: Certificate,
+        userId: String,
+    ) {
+        keyStoreManager.storeCertificate(
+            alias = userId,
+            certificate = certificate,
+        )
     }
 
     fun checkClientCredentials(email: String): Pair<String, String> {
@@ -52,10 +62,10 @@ object Server {
     }
 
     fun login(
-        userId: String,
         signedChallengeBuffer: String,
+        userId: String,
     ) {
-        val certificate = KeyStoreManager.getCertificate("public") ?: throw Exception("[Erro] Server: Certificado não encontrado.")
+        val certificate = keyStoreManager.getCertificate(userId) ?: throw Exception("[Erro] Server: Certificado não encontrado.")
 
         val challengeBuffer = signedChallengeBuffer.decrypt(certificate)
 

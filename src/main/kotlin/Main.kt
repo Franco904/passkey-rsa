@@ -12,9 +12,6 @@ fun main() {
 
     Server.init()
 
-    val certificate = Client.storePasskeyAndCreateCertificate()
-    Server.storeCertificate(certificate)
-
     while (true) {
         when (getAppMode()) {
             "1" -> runSignUpMode()
@@ -43,10 +40,13 @@ private fun runSignUpMode() {
     val (displayName, email) = Client.inputDisplayNameAndEmail()
 
     try {
-        Server.signUp(
+        val userId = Server.signUp(
             displayName = displayName,
             email = email,
         )
+
+        val certificate = Client.storePasskeyAndCreateCertificate(userId = userId)
+        Server.storeCertificate(certificate, userId = userId)
     } catch (e: Exception) {
         println(e.message)
     }
@@ -60,10 +60,11 @@ private fun runLoginMode() {
     try {
         val (userId, challengeBuffer) = Server.checkClientCredentials(email = email)
 
-        val signedChallengeBuffer = Client.signChallengeBuffer(challengeBuffer)
+        val signedChallengeBuffer = Client.signChallengeBuffer(challengeBuffer, userId = userId)
+
         Server.login(
-            userId = userId,
             signedChallengeBuffer = signedChallengeBuffer,
+            userId = userId,
         )
     } catch (e: Exception) {
         println(e.message)

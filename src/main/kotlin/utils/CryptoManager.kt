@@ -2,6 +2,7 @@ package utils
 
 import constants.FIVE_SECONDS_IN_MILLIS
 import constants.THIRTY_DAYS_IN_MILLIS
+import org.apache.commons.codec.binary.Hex
 import org.bouncycastle.asn1.x500.X500Name
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter
 import org.bouncycastle.cert.jcajce.JcaX509v1CertificateBuilder
@@ -11,16 +12,15 @@ import java.security.Key
 import java.security.KeyPairGenerator
 import java.security.PrivateKey
 import java.security.PublicKey
-import java.security.cert.X509Certificate
+import java.security.cert.Certificate
 import java.util.*
-
-typealias Certificate = X509Certificate
+import javax.crypto.Cipher
 
 object CryptoManager {
     private const val ALGORITHM = "RSA"
-//    private const val BLOCK_MODE = "None"
-//    private const val PADDING_SCHEME = "OAEPWithSHA256AndMGF1Padding"
-//    private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING_SCHEME"
+    private const val BLOCK_MODE = "None"
+    private const val PADDING_SCHEME = "OAEPWithSHA256AndMGF1Padding"
+    private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING_SCHEME"
     private const val PROVIDER = "BCFIPS"
 
     private const val X500_NAME = "CN=Issuer CA"
@@ -54,5 +54,31 @@ object CryptoManager {
         return certificateConverter.getCertificate(
             certificateBuilder.build(signerBuilder.build(signerPrivateKey as PrivateKey))
         )
+    }
+
+    private fun getEncrypter(key: Key): Cipher {
+        return Cipher.getInstance(TRANSFORMATION, PROVIDER).apply {
+            init(Cipher.ENCRYPT_MODE, key)
+        }
+    }
+
+    private fun getDecrypter(certificate: Certificate): Cipher {
+        return Cipher.getInstance(TRANSFORMATION, PROVIDER).apply {
+            init(Cipher.DECRYPT_MODE, certificate)
+        }
+    }
+
+    fun String.encrypt(key: Key): String {
+        val encrypter = getEncrypter(key)
+        val encryptedTextBytes = encrypter.doFinal(this.toByteArray())
+
+        return Hex.encodeHexString(encryptedTextBytes)
+    }
+
+    fun String.decrypt(certificate: Certificate): String {
+        val decrypter = getDecrypter(certificate)
+        val decryptedTextBytes = decrypter.doFinal(Hex.decodeHex(this))
+
+        return String(decryptedTextBytes, Charsets.UTF_8)
     }
 }

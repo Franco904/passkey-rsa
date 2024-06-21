@@ -1,23 +1,13 @@
 package auth
 
+import scanner
 import utils.CryptoManager
+import utils.CryptoManager.encrypt
 import utils.KeyStoreManager
 import utils.faker
 import java.security.cert.Certificate
 
 object Client {
-    fun inputDisplayNameAndEmail(): Pair<String, String> {
-//        println("Nome:")
-//        val displayName = scanner.nextLine().trim()
-        val displayName = faker.name.name()
-
-//        println("E-mail:")
-//        val email = scanner.nextLine().trim()
-        val email = "${displayName.lowercase().split(' ').last()}@email.com"
-
-        return Pair(displayName, email)
-    }
-
     fun storePasskeyAndCreateCertificate(): Certificate {
         val (privateKey, publicKey) = CryptoManager.createRSAKeyPair()
 
@@ -40,5 +30,30 @@ object Client {
         )
 
         return caCertificate
+    }
+
+    fun inputDisplayNameAndEmail(): Pair<String, String> {
+//        println("Nome:")
+//        val displayName = scanner.nextLine().trim()
+        val displayName = faker.name.name()
+
+//        println("E-mail:")
+//        val email = scanner.nextLine().trim()
+        val email = "${displayName.lowercase().split(' ').last()}@email.com"
+
+        return Pair(displayName, email)
+    }
+
+    fun inputEmail(): String {
+        println("E-mail:")
+        val email = scanner.nextLine().trim()
+
+        return email
+    }
+
+    fun signChallengeBuffer(challengeBuffer: String): String {
+        val privateKey = KeyStoreManager.getKey("private") ?: throw Exception("[Erro] Client: Chave privada não encontrada.")
+
+        return challengeBuffer.encrypt(privateKey)
     }
 }

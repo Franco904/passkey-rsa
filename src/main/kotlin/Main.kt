@@ -1,6 +1,5 @@
 import auth.Client
 import auth.Server
-import auth.models.ClientCredentialsDto
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
 import java.security.Security
 import java.util.*
@@ -19,7 +18,7 @@ fun main() {
     while (true) {
         when (getAppMode()) {
             "1" -> runSignUpMode()
-            "2" -> runAuthMode()
+            "2" -> runLoginMode()
             "0" -> break
         }
     }
@@ -43,18 +42,30 @@ private fun runSignUpMode() {
 
     val (displayName, email) = Client.inputDisplayNameAndEmail()
 
-    val clientCredentialsDto = ClientCredentialsDto(
-        displayName = displayName,
-        email = email,
-    )
-
     try {
-        Server.signUpClient(clientCredentialsDto = clientCredentialsDto)
+        Server.signUp(
+            displayName = displayName,
+            email = email,
+        )
     } catch (e: Exception) {
         println(e.message)
     }
 }
 
-private fun runAuthMode() {
+private fun runLoginMode() {
     println("[ Autenticação ]\n")
+
+    val email = Client.inputEmail()
+
+    try {
+        val (userId, challengeBuffer) = Server.checkClientCredentials(email = email)
+
+        val signedChallengeBuffer = Client.signChallengeBuffer(challengeBuffer)
+        Server.login(
+            userId = userId,
+            signedChallengeBuffer = signedChallengeBuffer,
+        )
+    } catch (e: Exception) {
+        println(e.message)
+    }
 }

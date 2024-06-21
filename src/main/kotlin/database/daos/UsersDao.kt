@@ -15,6 +15,13 @@ class UsersDao(
         )
     }
 
+    fun findById(id: String): User? {
+        return databaseManager.findSingle(
+            query = "SELECT * FROM ${User.TABLE} WHERE ${User.ID} = ?;",
+            args = listOf(id),
+        )
+    }
+
     fun findByEmail(email: String): User? {
         return databaseManager.findSingle(
             query = "SELECT * FROM ${User.TABLE} WHERE ${User.EMAIL} = ?;",

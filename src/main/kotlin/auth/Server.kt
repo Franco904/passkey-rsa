@@ -1,10 +1,12 @@
 package auth
 
-import auth.models.ClientAuthDataDto
+import auth.models.ClientCredentialsDto
 import database.DatabaseManager
 import database.daos.UsersDao
 import database.entities.User
-import utils.faker
+import utils.KeyStoreManager
+import utils.createSecureRandomString
+import java.security.cert.Certificate
 
 object Server {
     private val databaseManager = DatabaseManager()
@@ -18,19 +20,25 @@ object Server {
         databaseManager.disconnect()
     }
 
-    fun signUpClient(clientAuthDataDto: ClientAuthDataDto) {
-        val userStored = usersDao.findByEmail(clientAuthDataDto.email)
-        if (userStored != null) throw Exception("Usuário já cadastrado.")
+    fun storeCertificate(certificate: Certificate) {
+        KeyStoreManager.storeCertificate(
+            alias = "public",
+            certificate = certificate,
+        )
+    }
 
-        val challengeBuffer = faker.random.randomString(8)
-        val userId = faker.random.randomString(8)
+    fun signUpClient(clientCredentialsDto: ClientCredentialsDto) {
+        val userStored = usersDao.findByEmail(clientCredentialsDto.email)
+        if (userStored != null) throw Exception("[Erro] Server: Usuário já cadastrado.")
+
+        val userId = createSecureRandomString(size = 16)
+        val challengeBuffer = createSecureRandomString(size = 16)
 
         val user = User(
             id = userId,
-            displayName = clientAuthDataDto.displayName,
-            email = clientAuthDataDto.email,
+            displayName = clientCredentialsDto.displayName,
+            email = clientCredentialsDto.email,
             challengeBuffer = challengeBuffer,
-            challengeVerification = ""
         )
 
         usersDao.createUser(user)

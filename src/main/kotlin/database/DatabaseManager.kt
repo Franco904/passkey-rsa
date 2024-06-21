@@ -18,17 +18,16 @@ class DatabaseManager {
     }
 
     private fun createTables() {
-        connection?.createStatement()?.executeUpdate(
-            "DROP TABLE ${User.TABLE};"
-        )
+//        connection?.createStatement()?.executeUpdate(
+//            "DROP TABLE IF EXISTS ${User.TABLE};"
+//        )
         connection?.createStatement()?.executeUpdate(
             """
             CREATE TABLE IF NOT EXISTS ${User.TABLE}(
                 ${User.ID} TEXT PRIMARY KEY,
                 ${User.DISPLAY_NAME} TEXT NOT NULL,
                 ${User.EMAIL} TEXT NOT NULL,
-                ${User.CHALLENGE_BUFFER} TEXT NOT NULL,
-                ${User.CHALLENGE_VERIFICATION} TEXT NOT NULL
+                ${User.CHALLENGE_BUFFER} TEXT NOT NULL
             );
             """
         )
@@ -53,7 +52,6 @@ class DatabaseManager {
                 displayName = result.getString(2),
                 email = result.getString(3),
                 challengeBuffer = result.getString(4),
-                challengeVerification = result.getString(5),
             )
         }
     }

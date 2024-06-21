@@ -1,6 +1,6 @@
 import auth.Client
 import auth.Server
-import auth.models.ClientAuthDataDto
+import auth.models.ClientCredentialsDto
 import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider
 import java.security.Security
 import java.util.*
@@ -12,6 +12,9 @@ fun main() {
     Security.addProvider(BouncyCastleFipsProvider())
 
     Server.init()
+
+    val certificate = Client.storePasskeyAndCreateCertificate()
+    Server.storeCertificate(certificate)
 
     while (true) {
         when (getAppMode()) {
@@ -39,16 +42,14 @@ private fun runSignUpMode() {
     println("[ Registro ]\n")
 
     val (displayName, email) = Client.inputDisplayNameAndEmail()
-    val certificate = Client.createPasskeyAndCertificate()
 
-    val authDataDto = ClientAuthDataDto(
+    val clientCredentialsDto = ClientCredentialsDto(
         displayName = displayName,
         email = email,
-//        certificate = certificate,
     )
 
     try {
-        Server.signUpClient(clientAuthDataDto = authDataDto)
+        Server.signUpClient(clientCredentialsDto = clientCredentialsDto)
     } catch (e: Exception) {
         println(e.message)
     }

@@ -5,7 +5,6 @@ class User(
     val displayName: String,
     val email: String,
     val challengeBuffer: String,
-    val challengeVerification: String,
 ) {
     companion object {
         const val TABLE = "users"
@@ -13,6 +12,5 @@ class User(
         const val DISPLAY_NAME = "displayName"
         const val EMAIL = "email"
         const val CHALLENGE_BUFFER = "challengeBuffer"
-        const val CHALLENGE_VERIFICATION = "challengeVerification"
     }
 }

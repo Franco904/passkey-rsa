@@ -2,6 +2,7 @@ package utils
 
 import java.security.Key
 import java.security.KeyStore
+import java.security.cert.Certificate
 
 object KeyStoreManager {
     private const val TYPE = "BCFKS"
@@ -31,5 +32,19 @@ object KeyStoreManager {
             alias,
             KEYSTORE_MASTER_PASSWORD.toCharArray(),
         )
+    }
+
+    fun storeCertificate(
+        alias: String,
+        certificate: Certificate,
+    ) {
+        keyStore.setCertificateEntry(
+            alias,
+            certificate,
+        )
+    }
+
+    fun getCertificate(alias: String): Certificate? {
+        return keyStore.getCertificate(alias)
     }
 }

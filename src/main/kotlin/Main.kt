@@ -44,7 +44,7 @@ private fun runSignUpMode() {
     val authDataDto = ClientAuthDataDto(
         displayName = displayName,
         email = email,
-        certificate = certificate,
+//        certificate = certificate,
     )
 
     try {

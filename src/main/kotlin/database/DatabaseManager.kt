@@ -18,15 +18,17 @@ class DatabaseManager {
     }
 
     private fun createTables() {
-//        connection?.createStatement()?.executeUpdate(
-//            "DROP TABLE ${User.TABLE};"
-//        )
+        connection?.createStatement()?.executeUpdate(
+            "DROP TABLE ${User.TABLE};"
+        )
         connection?.createStatement()?.executeUpdate(
             """
             CREATE TABLE IF NOT EXISTS ${User.TABLE}(
-                ${User.ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                ${User.ID} TEXT PRIMARY KEY,
                 ${User.DISPLAY_NAME} TEXT NOT NULL,
-                ${User.EMAIL} TEXT NOT NULL
+                ${User.EMAIL} TEXT NOT NULL,
+                ${User.CHALLENGE_BUFFER} TEXT NOT NULL,
+                ${User.CHALLENGE_VERIFICATION} TEXT NOT NULL
             );
             """
         )
@@ -34,14 +36,24 @@ class DatabaseManager {
 
     fun insert(sql: String) = connection?.createStatement()?.execute(sql)
 
-    fun findById(query: String): User? {
-        return connection?.prepareStatement(query)?.use {
-            val result = it.executeQuery()
+    fun findSingle(
+        query: String,
+        args: List<Any> = emptyList(),
+    ): User? {
+        return connection?.prepareStatement(query)?.use { statement ->
+            args.forEachIndexed { index, param ->
+                statement.setObject(index + 1, param)
+            }
 
+            val result = statement.executeQuery()
+
+            val userId = result.getString(1) ?: return null
             User(
-                id = result.getString(1).toLongOrNull(),
+                id = userId,
                 displayName = result.getString(2),
-                email = result.getString(3)
+                email = result.getString(3),
+                challengeBuffer = result.getString(4),
+                challengeVerification = result.getString(5),
             )
         }
     }

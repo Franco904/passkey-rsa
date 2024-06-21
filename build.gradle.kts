@@ -20,4 +20,7 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.45.3.0")
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("org.slf4j:slf4j-log4j12:2.0.13")
+
+    // Fake data generation
+    implementation("io.github.serpro69:kotlin-faker:1.16.0")
 }

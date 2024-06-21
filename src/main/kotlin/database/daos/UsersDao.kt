@@ -9,15 +9,16 @@ class UsersDao(
     fun createUser(user: User) {
         databaseManager.insert(
             """
-            INSERT INTO ${User.TABLE}(${User.DISPLAY_NAME}, ${User.EMAIL})
-            VALUES("${user.displayName}", "${user.email}");
+            INSERT INTO ${User.TABLE}(${User.ID}, ${User.DISPLAY_NAME}, ${User.EMAIL}, ${User.CHALLENGE_BUFFER}, ${User.CHALLENGE_VERIFICATION})
+            VALUES("${user.id}", "${user.displayName}", "${user.email}", "${user.challengeBuffer}", "${user.challengeVerification}");
             """
         )
     }
 
     fun findByEmail(email: String): User? {
-        return databaseManager.findById(
-            query = "SELECT * FROM ${User.TABLE} WHERE ${User.EMAIL} = $email;"
+        return databaseManager.findSingle(
+            query = "SELECT * FROM ${User.TABLE} WHERE ${User.EMAIL} = ?;",
+            args = listOf(email),
         )
     }
 }

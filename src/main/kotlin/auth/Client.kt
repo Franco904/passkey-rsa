@@ -1,9 +1,9 @@
 package auth
 
 import scanner
-import utils.CryptoManager
-import utils.CryptoManager.encrypt
-import utils.KeyStoreManager
+import utils.managers.CryptoManager
+import utils.managers.CryptoManager.encrypt
+import utils.managers.KeyStoreManager
 import utils.faker
 import java.security.cert.Certificate
 

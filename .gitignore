@@ -40,3 +40,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+src/main/resources/database/passkey-rsa.db
+src/main/resources/keystore/client-ks.bcfks
+src/main/resources/keystore/server-ks.bcfks

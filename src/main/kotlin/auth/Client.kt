@@ -1,10 +1,9 @@
 package auth
 
 import scanner
-import utils.managers.CryptoManager
-import utils.managers.CryptoManager.encrypt
-import utils.managers.KeyStoreManager
-import utils.faker
+import utils.CryptoManager
+import utils.CryptoManager.encrypt
+import data.keystore.KeyStoreManager
 import java.security.cert.Certificate
 
 object Client {

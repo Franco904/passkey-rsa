@@ -1,4 +1,4 @@
-package database.entities
+package data.database.entities
 
 class User(
     val id: String,

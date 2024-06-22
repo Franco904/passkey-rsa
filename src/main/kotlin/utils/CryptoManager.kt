@@ -1,4 +1,4 @@
-package utils.managers
+package utils
 
 import constants.FIVE_SECONDS_IN_MILLIS
 import constants.THIRTY_DAYS_IN_MILLIS

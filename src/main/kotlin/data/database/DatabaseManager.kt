@@ -1,6 +1,6 @@
-package database
+package data.database
 
-import database.entities.User
+import data.database.entities.User
 import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager

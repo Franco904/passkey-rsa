@@ -1,7 +1,7 @@
-package database.daos
+package data.database.daos
 
-import database.DatabaseManager
-import database.entities.User
+import data.database.DatabaseManager
+import data.database.entities.User
 
 class UsersDao(
     private val databaseManager: DatabaseManager,

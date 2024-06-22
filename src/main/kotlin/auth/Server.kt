@@ -1,10 +1,10 @@
 package auth
 
-import database.DatabaseManager
-import database.daos.UsersDao
-import database.entities.User
-import utils.managers.CryptoManager.decrypt
-import utils.managers.KeyStoreManager
+import data.database.DatabaseManager
+import data.database.daos.UsersDao
+import data.database.entities.User
+import utils.CryptoManager.decrypt
+import data.keystore.KeyStoreManager
 import utils.createSecureRandomString
 import java.security.cert.Certificate
 

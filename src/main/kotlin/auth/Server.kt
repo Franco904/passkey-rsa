@@ -9,10 +9,10 @@ import utils.createSecureRandomString
 import java.security.cert.Certificate
 
 object Server {
-    private val databaseManager = DatabaseManager()
-    private val usersDao = UsersDao(databaseManager)
+    private val databaseManager by lazy { DatabaseManager() }
+    private val usersDao by lazy { UsersDao(databaseManager) }
 
-    private val keyStoreManager = KeyStoreManager()
+    private val keyStoreManager by lazy { KeyStoreManager("server-ks") }
 
     fun init() {
         databaseManager.connect()
@@ -73,10 +73,8 @@ object Server {
 
         val isAuthenticated = challengeBuffer == storedChallengeBuffer
 
-        if (isAuthenticated) {
-            println("[Sucesso] Server: Usuário autenticado com sucesso.")
-        } else {
-            println("[Erro] Server: Challenge inválido.")
+        if (!isAuthenticated) {
+            throw Exception("[Erro] Server: Challenge inválido.")
         }
     }
 }

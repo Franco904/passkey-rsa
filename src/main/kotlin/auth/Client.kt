@@ -8,7 +8,7 @@ import utils.faker
 import java.security.cert.Certificate
 
 object Client {
-    private val keyStoreManager = KeyStoreManager()
+    private val keyStoreManager by lazy { KeyStoreManager("client-ks") }
 
     fun inputDisplayNameAndEmail(): Pair<String, String> {
         println("Nome:")
@@ -22,7 +22,7 @@ object Client {
         return Pair(displayName, email)
     }
 
-    fun storePasskeyAndCreateCertificate(userId: String): Certificate {
+    fun storePrivateKeyAndCreateCertificate(userId: String): Certificate {
         val (privateKey, publicKey) = CryptoManager.createRSAKeyPair()
 
         val selfSignedCertificate = CryptoManager.createRSACertificate(

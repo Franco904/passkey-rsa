@@ -45,10 +45,12 @@ private fun runSignUpMode() {
             email = email,
         )
 
-        val certificate = Client.storePasskeyAndCreateCertificate(userId = userId)
+        val certificate = Client.storePrivateKeyAndCreateCertificate(userId = userId)
         Server.storeCertificate(certificate, userId = userId)
+
+        println("[Sucesso] Server: Usuário registrado com sucesso.\n")
     } catch (e: Exception) {
-        println(e.message)
+        println("${e.message}\n")
     }
 }
 
@@ -66,7 +68,9 @@ private fun runLoginMode() {
             signedChallengeBuffer = signedChallengeBuffer,
             userId = userId,
         )
+
+        println("[Sucesso] Server: Usuário autenticado com sucesso.\n")
     } catch (e: Exception) {
-        println(e.message)
+        println("${e.message}\n")
     }
 }

@@ -1,6 +1,7 @@
 package database
 
 import database.entities.User
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 
@@ -8,6 +9,8 @@ class DatabaseManager {
     private var connection: Connection? = null
 
     fun connect() {
+        File(DATABASE_FILE_PATH).apply { if (!exists()) createNewFile() }
+
         connection = DriverManager.getConnection("jdbc:sqlite:$DATABASE_FILE_PATH")
 
         createTables()
